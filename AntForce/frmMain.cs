@@ -30,9 +30,43 @@ namespace AntForce
     public partial class AntForce : Form
     {
         DBConnection DBCon = DBConnection.Instance();
+        private static Mutex _mutex;
+
+        private static bool IsSingleInstance()
+        {
+            _mutex = new Mutex(false, "12BB86C3E95AE76743B9BA7796FB6");
+
+            // keep the mutex reference alive until the normal 
+            //termination of the program
+            GC.KeepAlive(_mutex);
+
+            try
+            {
+                return _mutex.WaitOne(0, false);
+            }
+            catch (AbandonedMutexException)
+            {
+                // if one thread acquires a Mutex object 
+                //that another thread has abandoned 
+                //by exiting without releasing it
+
+                _mutex.ReleaseMutex();
+                return _mutex.WaitOne(0, false);
+            }
+        }
+
         public AntForce()
         {
+            if (!IsSingleInstance())
+            {
+                MessageBox.Show("TCC Bot already running!");
+                this.Close();
+                return;
+            }
+
             InitializeComponent();
+            
+            //
             string publishVersion = "";
             if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed)
             {
@@ -334,7 +368,7 @@ namespace AntForce
                     cmd.CommandText = query;
                     cmd.ExecuteNonQuery();
                 }
-                catch (MySqlException ex1)
+                catch (MySqlException)
                 {
 
                 }
@@ -1177,7 +1211,7 @@ namespace AntForce
                         //show info
                         infoName.Text = "ชื่อ : " + arr["name"].ToString();
                         infoSite.Text = "สถานบริการ : (" + arr["sitecode"].ToString() + ") " + arr["hospital"].ToString();
-
+                        toolTip_wsHospName.SetToolTip(infoSite, infoSite.Text);
 
                         //end save
                         //Console.WriteLine(""+username);
@@ -1259,7 +1293,12 @@ namespace AntForce
                                 listVendor.DisplayMember = "Text";
                                 listVendor.ValueMember = "Value";
                                 List<Object> items = new List<Object>();
-                                listVendor.Items.Clear();
+                                try
+                                {
+                                    listVendor.Items.Clear();
+                                }catch(Exception){
+
+                                }
                                 string selectTxt = "";
                                 foreach (var val in valConst)
                                 {
@@ -1272,7 +1311,8 @@ namespace AntForce
                                 }
                                 listVendor.DataSource = items;
                                 listVendor.SelectedValue = selectTxt;
-                                Console.WriteLine(items.ToString());
+                                listVendor.Text = "Select HIS type...";
+                                //Console.WriteLine(items.ToString());
                             }
                             else
                             {
@@ -1290,6 +1330,7 @@ namespace AntForce
                             btnLogin.Text = "Logout";
                             btnStart.Visible = true;
                             //
+                            listVendor.Enabled = true;
                             txtHost.Enabled = true;
                             txtUsername.Enabled = true;
                             txtPassword.Enabled = true;
@@ -1532,7 +1573,6 @@ namespace AntForce
             //
             if (Properties.Settings.Default.wsPassword != "")
             {
-                toolTip_wsPassword.SetToolTip(this.txtPassLogin, Properties.Settings.Default.wsPassword);
                 txtPassLogin.Text = Properties.Settings.Default.wsPassword;
             }
             if (Properties.Settings.Default.wsUsername != "")
@@ -1561,6 +1601,16 @@ namespace AntForce
             {
                 //listVendor.Text = null;
                 //listVendor.SelectedText = Properties.Settings.Default.hisVendor;
+            }
+
+            //auto login
+            if (Properties.Settings.Default.wsPassword != "" && Properties.Settings.Default.wsUsername != "")
+            {
+                btnLogin.PerformClick();
+                if (Properties.Settings.Default.secretKey != "" && Properties.Settings.Default.hisDBname != "" && Properties.Settings.Default.hisVendor != "")
+                {
+                    btnStart.PerformClick();
+                }
             }
 
         }
@@ -1656,7 +1706,7 @@ namespace AntForce
                     connect_db.Text = "Logout";
 
                     listDB.Enabled = true;
-                    listVendor.Enabled = true;
+                    listVendor.Enabled = false;
                     txtsecretKey.Enabled = true;
                     //save setting
                     Properties.Settings.Default.hisHost = txtHost.Text;
@@ -1681,6 +1731,59 @@ namespace AntForce
             Properties.Settings.Default.hisDBname = listDB.Text;
             //MessageBox.Show(Properties.Settings.Default.hisDBname);
             Properties.Settings.Default.Save();
+        }
+
+        private void AntForce_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                notifyIcon.BalloonTipText = "TCC Bot still working...";
+                notifyIcon.BalloonTipTitle = this.Text;
+                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                notifyIcon.Text = lblQleft.Text;
+                notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(500);
+                this.Hide();
+            }
+            else if (FormWindowState.Normal == this.WindowState)
+            {
+                notifyIcon.Visible = false;
+            }
+        }
+
+        private void notifyIcon_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void AntForce_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult result = MessageBox.Show("Do you really want to exit?", "Alert dialog", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you really want to exit?", "Alert dialog", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                System.Windows.Forms.Application.Exit();
+            }
         }
 
 

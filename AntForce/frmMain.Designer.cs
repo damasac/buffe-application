@@ -39,6 +39,7 @@ namespace AntForce
             this.txtPassLogin = new System.Windows.Forms.TextBox();
             this.txtUserLogin = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lblQleft = new System.Windows.Forms.Label();
             this.lbCpu = new System.Windows.Forms.Label();
             this.infoSite = new System.Windows.Forms.Label();
             this.infoName = new System.Windows.Forms.Label();
@@ -53,12 +54,12 @@ namespace AntForce
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.btnStart = new System.Windows.Forms.Button();
             this.txtsecretKey = new System.Windows.Forms.TextBox();
             this.listVendor = new System.Windows.Forms.ComboBox();
             this.listDB = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,13 +74,15 @@ namespace AntForce
             this.timer3_command = new System.Windows.Forms.Timer(this.components);
             this.timer4_syncdata = new System.Windows.Forms.Timer(this.components);
             this.timer5_ping = new System.Windows.Forms.Timer(this.components);
-            this.toolTip_wsPassword = new System.Windows.Forms.ToolTip(this.components);
-            this.lblQleft = new System.Windows.Forms.Label();
+            this.toolTip_wsHospName = new System.Windows.Forms.ToolTip(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -154,6 +157,15 @@ namespace AntForce
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Welcome";
             // 
+            // lblQleft
+            // 
+            this.lblQleft.AutoSize = true;
+            this.lblQleft.Location = new System.Drawing.Point(6, 69);
+            this.lblQleft.Name = "lblQleft";
+            this.lblQleft.Size = new System.Drawing.Size(96, 13);
+            this.lblQleft.TabIndex = 3;
+            this.lblQleft.Text = "จำนวนคิวที่เหลือ :  ";
+            // 
             // lbCpu
             // 
             this.lbCpu.AutoSize = true;
@@ -193,7 +205,7 @@ namespace AntForce
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Location = new System.Drawing.Point(12, 168);
+            this.groupBox3.Location = new System.Drawing.Point(12, 242);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(237, 161);
             this.groupBox3.TabIndex = 2;
@@ -278,23 +290,32 @@ namespace AntForce
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.btnStart);
             this.groupBox4.Controls.Add(this.txtsecretKey);
-            this.groupBox4.Controls.Add(this.listVendor);
             this.groupBox4.Controls.Add(this.listDB);
             this.groupBox4.Controls.Add(this.label9);
-            this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Controls.Add(this.label7);
             this.groupBox4.Location = new System.Drawing.Point(265, 168);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(315, 161);
+            this.groupBox4.Size = new System.Drawing.Size(315, 235);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Configuration";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 70);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(295, 26);
+            this.label10.TabIndex = 7;
+            this.label10.Text = "*ตัวเลขหรือภาษาอังกฤษอย่างน้อย 6 หลัก ใช้เป็นกุญแจเข้ารหัส\r\nเลขบัตร ชื่อและสกุล ก" +
+    "่อนส่งออกจาก server หน่วยบริการ";
+            // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(132, 123);
+            this.btnStart.Location = new System.Drawing.Point(132, 105);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 6;
@@ -305,7 +326,7 @@ namespace AntForce
             // 
             // txtsecretKey
             // 
-            this.txtsecretKey.Location = new System.Drawing.Point(78, 74);
+            this.txtsecretKey.Location = new System.Drawing.Point(78, 48);
             this.txtsecretKey.Name = "txtsecretKey";
             this.txtsecretKey.Size = new System.Drawing.Size(221, 20);
             this.txtsecretKey.TabIndex = 5;
@@ -313,11 +334,11 @@ namespace AntForce
             // listVendor
             // 
             this.listVendor.FormattingEnabled = true;
-            this.listVendor.Location = new System.Drawing.Point(78, 47);
+            this.listVendor.Location = new System.Drawing.Point(12, 24);
             this.listVendor.Name = "listVendor";
-            this.listVendor.Size = new System.Drawing.Size(221, 21);
+            this.listVendor.Size = new System.Drawing.Size(219, 21);
             this.listVendor.TabIndex = 4;
-            this.listVendor.Text = "select vendor...";
+            this.listVendor.Text = "Select HIS type...";
             // 
             // listDB
             // 
@@ -332,20 +353,11 @@ namespace AntForce
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 77);
+            this.label9.Location = new System.Drawing.Point(6, 51);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(60, 13);
             this.label9.TabIndex = 2;
             this.label9.Text = "การเข้ารหัส";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 55);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Vendor";
             // 
             // label7
             // 
@@ -380,15 +392,16 @@ namespace AntForce
             // timerConfigToolStripMenuItem
             // 
             this.timerConfigToolStripMenuItem.Name = "timerConfigToolStripMenuItem";
-            this.timerConfigToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.timerConfigToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.timerConfigToolStripMenuItem.Text = "Timer config";
             this.timerConfigToolStripMenuItem.Click += new System.EventHandler(this.timerConfigToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.logoutToolStripMenuItem.Text = "Exit";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -414,9 +427,9 @@ namespace AntForce
             // 
             // txtLog
             // 
-            this.txtLog.Location = new System.Drawing.Point(12, 347);
+            this.txtLog.Location = new System.Drawing.Point(12, 420);
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(567, 319);
+            this.txtLog.Size = new System.Drawing.Size(567, 246);
             this.txtLog.TabIndex = 5;
             this.txtLog.Text = "";
             // 
@@ -440,18 +453,28 @@ namespace AntForce
             // 
             this.timer5_ping.Tick += new System.EventHandler(this.timer5_ping_Tick);
             // 
-            // lblQleft
+            // notifyIcon
             // 
-            this.lblQleft.AutoSize = true;
-            this.lblQleft.Location = new System.Drawing.Point(6, 69);
-            this.lblQleft.Name = "lblQleft";
-            this.lblQleft.Size = new System.Drawing.Size(96, 13);
-            this.lblQleft.TabIndex = 3;
-            this.lblQleft.Text = "จำนวนคิวที่เหลือ :  ";
+            this.notifyIcon.BalloonTipText = "zz";
+            this.notifyIcon.BalloonTipTitle = "xx";
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.listVendor);
+            this.groupBox5.Location = new System.Drawing.Point(12, 168);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(237, 58);
+            this.groupBox5.TabIndex = 6;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "HIS Type";
             // 
             // AntForce
             // 
             this.ClientSize = new System.Drawing.Size(593, 683);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -462,8 +485,10 @@ namespace AntForce
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AntForce";
             this.Text = "TCC Bot - ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AntForce_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AntForce_FormClosed);
             this.Load += new System.EventHandler(this.AntForce_Load);
+            this.Resize += new System.EventHandler(this.AntForce_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -474,6 +499,7 @@ namespace AntForce
             this.groupBox4.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -506,7 +532,6 @@ namespace AntForce
         private System.Windows.Forms.ComboBox listVendor;
         private System.Windows.Forms.ComboBox listDB;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem settingToolStripMenuItem;
@@ -521,9 +546,12 @@ namespace AntForce
         private System.Windows.Forms.Timer timer3_command;
         private System.Windows.Forms.Timer timer4_syncdata;
         private System.Windows.Forms.Timer timer5_ping;
-        private System.Windows.Forms.ToolTip toolTip_wsPassword;
+        private System.Windows.Forms.ToolTip toolTip_wsHospName;
         private System.Windows.Forms.Label lbCpu;
         private System.Windows.Forms.Label lblQleft;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.GroupBox groupBox5;
 
         
     }
